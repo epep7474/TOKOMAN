@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MAMAN STORE - Digital & Scripts</title>
+    <title>MAMAN STORE - Premium Scripts</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -11,29 +11,25 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap');
-        body { background: #020617; color: #f1f5f9; font-family: 'Plus Jakarta Sans', sans-serif; }
-        .glass { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.05); }
-        .cyber-border { border-left: 4px solid #2563eb; }
+        body { background: #020617; color: #f8fafc; font-family: 'Plus Jakarta Sans', sans-serif; }
+        .glass { background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.05); }
         .btn-blue { background: #2563eb; transition: 0.3s; }
-        .btn-blue:hover { background: #1d4ed8; box-shadow: 0 0 20px rgba(37,99,235,0.4); }
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-thumb { background: #2563eb; border-radius: 10px; }
+        .btn-blue:hover { background: #1d4ed8; box-shadow: 0 0 15px rgba(37, 99, 235, 0.3); }
     </style>
 </head>
 <body class="min-h-screen">
 
     <div id="loader" class="fixed inset-0 bg-slate-950 flex flex-col items-center justify-center z-[100]">
-        <div class="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mb-4"></div>
-        <p class="text-blue-500 font-black tracking-widest uppercase">MAMAN STORE</p>
+        <div class="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
     </div>
 
     <nav class="p-4 glass sticky top-0 z-40 hidden" id="nav">
         <div class="max-w-4xl mx-auto flex justify-between items-center">
-            <h1 class="text-xl font-black text-blue-500 italic">MAMAN<span class="text-white">STORE</span></h1>
+            <h1 class="text-xl font-black text-blue-500 italic uppercase">MAMAN STORE</h1>
             <div class="flex items-center gap-4">
                 <div class="text-right">
-                    <p class="text-[9px] text-slate-500 font-bold uppercase leading-none">Saldo Lu</p>
-                    <p id="userBalance" class="text-green-400 font-black text-sm">Rp 0</p>
+                    <p class="text-[9px] text-slate-500 font-bold">SALDO LU</p>
+                    <p id="userBalance" class="text-green-400 font-black text-sm leading-none">Rp 0</p>
                 </div>
                 <button onclick="logout()" class="text-red-500 hover:scale-110 transition"><i class="fa-solid fa-power-off"></i></button>
             </div>
@@ -42,100 +38,102 @@
 
     <div class="max-w-md mx-auto p-5">
         
-        <div id="login-section" class="hidden mt-10">
+        <div id="login-section" class="hidden mt-12">
             <div class="glass p-8 rounded-[2.5rem] shadow-2xl border-t-2 border-blue-600">
                 <div class="text-center mb-8">
-                    <h2 class="text-3xl font-black italic">LOGIN</h2>
+                    <h2 class="text-3xl font-black italic text-blue-500">LOGIN</h2>
                     <p class="text-slate-400 text-xs mt-1">Masuk buat belanja di Maman Store.</p>
                 </div>
                 <div class="space-y-4">
-                    <input type="email" id="login-email" placeholder="Email Google" class="w-full p-4 bg-slate-900 rounded-2xl border border-slate-800 outline-none focus:border-blue-600">
-                    <input type="password" id="login-pass" placeholder="Password" class="w-full p-4 bg-slate-900 rounded-2xl border border-slate-800 outline-none focus:border-blue-600">
-                    <button onclick="handleLogin()" class="btn-blue w-full py-4 rounded-2xl font-black">GAS MASUK</button>
-                    <p class="text-center text-xs text-slate-500">Belum punya akun? <button onclick="showAuth('register')" class="text-blue-500 font-bold underline">Daftar di sini</button></p>
+                    <input type="email" id="login-email" placeholder="Email Google" class="w-full p-4 bg-slate-900 rounded-2xl border border-slate-800 outline-none focus:border-blue-600 transition">
+                    <input type="password" id="login-pass" placeholder="Password" class="w-full p-4 bg-slate-900 rounded-2xl border border-slate-800 outline-none focus:border-blue-600 transition">
+                    <button onclick="handleLogin()" class="btn-blue w-full py-4 rounded-2xl font-black shadow-lg">GAS MASUK</button>
+                    <p class="text-center text-xs text-slate-500">Belum punya akun? <button onclick="showAuth('register')" class="text-blue-400 font-bold underline">Daftar Sekarang</button></p>
                 </div>
             </div>
         </div>
 
-        <div id="register-section" class="hidden mt-10">
+        <div id="register-section" class="hidden mt-12">
             <div class="glass p-8 rounded-[2.5rem] shadow-2xl border-t-2 border-green-600">
                 <div class="text-center mb-8">
-                    <h2 class="text-3xl font-black italic text-green-500">DAFTAR</h2>
-                    <p class="text-slate-400 text-xs mt-1">Bikin akun Maman Store dulu, Man.</p>
+                    <h2 class="text-3xl font-black italic text-green-500 uppercase">Daftar Akun</h2>
+                    <p class="text-slate-400 text-xs mt-1">Bikin akun baru dulu, Man.</p>
                 </div>
                 <div class="space-y-4">
-                    <input type="email" id="reg-email" placeholder="Email Baru" class="w-full p-4 bg-slate-900 rounded-2xl border border-slate-800 outline-none focus:border-green-600">
-                    <input type="password" id="reg-pass" placeholder="Password Baru" class="w-full p-4 bg-slate-900 rounded-2xl border border-slate-800 outline-none focus:border-green-600">
+                    <input type="email" id="reg-email" placeholder="Email Baru" class="w-full p-4 bg-slate-900 rounded-2xl border border-slate-800 outline-none focus:border-green-600 transition text-sm">
+                    <input type="password" id="reg-pass" placeholder="Password Baru" class="w-full p-4 bg-slate-900 rounded-2xl border border-slate-800 outline-none focus:border-green-600 transition text-sm">
                     
                     <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800 flex items-center justify-between">
                         <div id="captchaBox" class="text-blue-500 font-mono font-black italic text-xl tracking-widest"></div>
                         <input type="text" id="captchaInput" placeholder="KODE" class="w-20 bg-transparent text-center border-b border-blue-900 text-blue-400 outline-none font-bold uppercase">
                     </div>
 
-                    <button onclick="handleRegister()" class="w-full bg-green-600 py-4 rounded-2xl font-black hover:bg-green-700 transition">DAFTAR SEKARANG</button>
-                    <p class="text-center text-xs text-slate-500">Udah ada akun? <button onclick="showAuth('login')" class="text-blue-500 font-bold underline">Login aja</button></p>
+                    <button onclick="handleRegister()" class="w-full bg-green-600 py-4 rounded-2xl font-black hover:bg-green-700 transition shadow-lg shadow-green-600/20">DAFTAR SEKARANG</button>
+                    <p class="text-center text-xs text-slate-500">Udah ada akun? <button onclick="showAuth('login')" class="text-blue-500 font-bold underline">Login Sini</button></p>
                 </div>
             </div>
         </div>
 
         <div id="user-section" class="hidden space-y-6">
-            <div class="glass p-6 rounded-[2rem] cyber-border">
-                <h3 class="font-black text-xs text-blue-500 mb-4 tracking-tighter uppercase">Metode Top Up QRIS</h3>
-                <div class="bg-white p-2 rounded-2xl mb-5 flex justify-center shadow-lg shadow-white/5">
-                    <img src="https://files.catbox.moe/vx9780.jpg" class="w-48">
+            <div class="glass p-6 rounded-[2rem] border-l-4 border-blue-600">
+                <h3 class="font-black text-[10px] text-blue-500 mb-4 tracking-widest uppercase">TOP UP SALDO QRIS</h3>
+                <div class="bg-white p-2 rounded-2xl mb-4 max-w-[200px] mx-auto">
+                    <img src="https://files.catbox.moe/vx9780.jpg" class="w-full rounded-xl">
                 </div>
                 <div class="space-y-3">
                     <input type="number" id="topupAmount" placeholder="Nominal" class="w-full p-3.5 bg-slate-900 rounded-xl outline-none border border-slate-800 text-sm">
-                    <input type="text" id="senderName" placeholder="Nama Pengirim (Cth: Ilman)" class="w-full p-3.5 bg-slate-900 rounded-xl outline-none border border-slate-800 text-sm">
-                    <button onclick="sendTopup()" class="w-full bg-green-600 py-3.5 rounded-xl font-black text-xs hover:bg-green-500 shadow-lg shadow-green-600/20">KONFIRMASI BAYAR</button>
+                    <input type="text" id="senderName" placeholder="Nama Pengirim (Ilman)" class="w-full p-3.5 bg-slate-900 rounded-xl outline-none border border-slate-800 text-sm">
+                    <button onclick="sendTopup()" class="w-full bg-green-600 py-3.5 rounded-xl font-black text-xs hover:bg-green-500 shadow-lg transition">KIRIM BUKTI</button>
                 </div>
             </div>
 
-            <h2 class="text-xl font-black italic tracking-wider px-2">LIST PRODUK</h2>
+            <div class="flex items-center gap-2 px-2">
+                <div class="h-1 w-8 bg-blue-600 rounded"></div>
+                <h2 class="text-sm font-black italic tracking-widest">PRODUK TOKO</h2>
+            </div>
             <div id="productList" class="grid gap-3"></div>
-
-            <button onclick="toggleChat()" class="fixed bottom-6 right-6 w-14 h-14 bg-blue-600 rounded-2xl shadow-2xl flex items-center justify-center text-xl z-50">
-                <i class="fa-solid fa-headset"></i>
-            </button>
-
-            <div id="chatBox" class="fixed bottom-24 right-6 left-6 max-w-sm glass rounded-[2.5rem] hidden flex flex-col h-[400px] z-50 overflow-hidden shadow-2xl border border-white/10">
-                <div class="p-4 bg-blue-600 flex justify-between items-center text-sm font-bold uppercase tracking-widest">
-                    <span>Chat Owner</span>
-                    <button onclick="toggleChat()"><i class="fa-solid fa-xmark"></i></button>
-                </div>
-                <div id="chatMessages" class="flex-1 p-5 overflow-y-auto space-y-4 text-[11px]"></div>
-                <div class="p-4 bg-slate-900/50 flex gap-2">
-                    <input type="text" id="chatInput" class="flex-1 bg-slate-800 p-3 rounded-xl outline-none text-xs border border-slate-700" placeholder="Pesan anda...">
-                    <button onclick="sendChat()" class="bg-blue-600 w-10 h-10 rounded-xl flex items-center justify-center"><i class="fa-solid fa-paper-plane text-xs"></i></button>
-                </div>
-            </div>
         </div>
 
         <div id="admin-section" class="hidden space-y-6">
-            <div class="bg-blue-600 p-4 rounded-2xl text-center font-black text-sm italic tracking-widest uppercase shadow-lg shadow-blue-600/30">
-                <i class="fa-solid fa-crown mr-2"></i> Owner Maman Panel
+            <div class="bg-blue-600 p-4 rounded-2xl text-center font-black text-sm shadow-xl shadow-blue-500/20">
+                <i class="fa-solid fa-user-shield mr-2"></i> OWNER PANEL: ILMAN CAHYO
             </div>
             
             <div class="glass p-6 rounded-[2rem] border-t-2 border-blue-500">
-                <h3 class="font-bold text-xs mb-4 text-blue-400 uppercase tracking-widest">Update Barang Toko</h3>
+                <h3 class="font-bold text-xs mb-4 text-blue-400 uppercase">Tambah Barang</h3>
                 <div class="space-y-3">
                     <input type="text" id="pName" placeholder="Nama Produk" class="w-full p-3 bg-slate-900 rounded-xl text-xs outline-none border border-slate-800">
-                    <input type="number" id="pPrice" placeholder="Harga Jual" class="w-full p-3 bg-slate-900 rounded-xl text-xs outline-none border border-slate-800">
-                    <input type="text" id="pLink" placeholder="Link File Download" class="w-full p-3 bg-slate-900 rounded-xl text-xs outline-none border border-slate-800">
-                    <button onclick="addProduct()" class="w-full bg-blue-600 py-3 rounded-xl font-bold text-xs shadow-lg">POSTING KE TOKO</button>
+                    <input type="number" id="pPrice" placeholder="Harga" class="w-full p-3 bg-slate-900 rounded-xl text-xs outline-none border border-slate-800">
+                    <input type="text" id="pLink" placeholder="Link Download File" class="w-full p-3 bg-slate-900 rounded-xl text-xs outline-none border border-slate-800">
+                    <button onclick="addProduct()" class="w-full bg-blue-600 py-3 rounded-xl font-black text-xs">POSTING KE TOKO</button>
                 </div>
             </div>
 
-            <div class="glass p-6 rounded-[2rem] border-l-4 border-green-500">
-                <h3 class="font-black text-xs mb-4 text-green-500 uppercase tracking-widest italic">Konfirmasi Saldo</h3>
+            <div class="glass p-6 rounded-[2rem]">
+                <h3 class="font-bold text-xs mb-4 text-green-500 italic uppercase">Konfirmasi Saldo</h3>
                 <div id="topupList" class="space-y-3"></div>
             </div>
         </div>
+    </div>
 
+    <button onclick="toggleChat()" class="fixed bottom-6 right-6 w-14 h-14 bg-blue-600 rounded-2xl shadow-2xl flex items-center justify-center text-xl z-50">
+        <i class="fa-solid fa-headset"></i>
+    </button>
+
+    <div id="chatBox" class="fixed bottom-24 right-6 left-6 max-w-sm glass rounded-[2.5rem] hidden flex flex-col h-[420px] z-50 overflow-hidden shadow-2xl border border-white/10">
+        <div class="p-4 bg-blue-600 flex justify-between items-center text-xs font-black uppercase tracking-widest">
+            <span>Customer Service</span>
+            <button onclick="toggleChat()"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div id="chatMessages" class="flex-1 p-5 overflow-y-auto space-y-4 text-[11px]"></div>
+        <div class="p-4 bg-slate-900 flex gap-2">
+            <input type="text" id="chatInput" class="flex-1 bg-slate-800 p-3 rounded-xl outline-none text-xs" placeholder="Ketik pesan...">
+            <button onclick="sendChat()" class="bg-blue-600 w-10 h-10 rounded-xl flex items-center justify-center"><i class="fa-solid fa-paper-plane text-xs"></i></button>
+        </div>
     </div>
 
     <script>
-        // CONFIG FIREBASE (FIXED API KEY - TANPA SPASI!)
+        // CONFIG FIREBASE (FIXED - TANPA SPASI!)
         const firebaseConfig = {
             apiKey: "AIzaSyDAxf5XPBWygyF1KlHV3Jd21vIFxwuzaAg",
             authDomain: "toko-manan.firebaseapp.com",
@@ -152,7 +150,6 @@
 
         const ownerEmail = "ilmancahyosyabani1@gmail.com"; 
 
-        // --- AUTH UI SWITCHER ---
         function showAuth(mode) {
             document.getElementById('login-section').classList.add('hidden');
             document.getElementById('register-section').classList.add('hidden');
@@ -160,19 +157,17 @@
             if(mode === 'register') genCap();
         }
 
-        // --- CAPTCHA ---
         let currentCap = "";
         function genCap() {
             currentCap = Math.random().toString(36).substring(2, 6).toUpperCase();
             document.getElementById('captchaBox').innerText = currentCap;
         }
 
-        // --- AUTH ACTIONS ---
         function handleLogin() {
             const email = document.getElementById('login-email').value;
             const pass = document.getElementById('login-pass').value;
-            if(!email || !pass) return alert("Isi dulu, Man!");
-            auth.signInWithEmailAndPassword(email, pass).catch(err => alert("Password salah atau Akun belom ada!"));
+            if(!email || !pass) return alert("Isi email/password dulu!");
+            auth.signInWithEmailAndPassword(email, pass).catch(err => alert("Password salah atau Akun belom ada, Man!"));
         }
 
         function handleRegister() {
@@ -180,20 +175,15 @@
             const pass = document.getElementById('reg-pass').value;
             const cin = document.getElementById('captchaInput').value;
 
-            if(cin.toUpperCase() !== currentCap) {
-                alert("KODE CAPTCHA SALAH!");
-                genCap();
-                return;
-            }
-            if(!email || !pass) return alert("Isi email & pass baru!");
+            if(cin.toUpperCase() !== currentCap) { alert("CAPTCHA SALAH!"); genCap(); return; }
+            if(!email || !pass) return alert("Email/Pass jangan kosong!");
 
             auth.createUserWithEmailAndPassword(email, pass).then(u => {
                 db.ref('users/' + u.user.uid).set({ email, balance: 0 });
-                alert("Daftar Sukses! Langsung masuk.");
-            }).catch(err => alert("Error Daftar: " + err.message));
+                alert("Daftar Sukses!");
+            }).catch(err => alert("Gagal Daftar: " + err.message));
         }
 
-        // --- OBSERVER ---
         auth.onAuthStateChanged(user => {
             document.getElementById('loader').classList.add('hidden');
             if (user) {
@@ -219,7 +209,6 @@
             }
         });
 
-        // --- FUNCTIONS ---
         function loadBalance(uid) {
             db.ref('users/' + uid + '/balance').on('value', s => {
                 const b = s.val() || 0;
@@ -231,9 +220,9 @@
             const name = document.getElementById('pName').value;
             const price = parseInt(document.getElementById('pPrice').value);
             const link = document.getElementById('pLink').value;
-            if(!name || !price) return alert("Isi data produk!");
+            if(!name || !price) return alert("Lengkapi data barang!");
             db.ref('products').push({ name, price, link });
-            alert("Sip, Produk Udah Masuk!");
+            alert("Barang udah masuk toko!");
         }
 
         function loadProducts() {
@@ -242,11 +231,11 @@
                 s.forEach(c => {
                     const p = c.val();
                     h += `<div class="glass p-5 rounded-[1.8rem] flex justify-between items-center border border-white/5 shadow-xl">
-                        <div><p class="font-black text-sm italic">${p.name}</p><p class="text-green-400 text-xs font-bold">Rp ${p.price.toLocaleString()}</p></div>
-                        <button onclick="buy('${p.price}', '${p.link}')" class="bg-blue-600 px-6 py-2 rounded-xl font-black text-[10px] shadow-lg shadow-blue-600/30">BELI</button>
+                        <div><p class="font-black text-sm italic">${p.name}</p><p class="text-green-400 text-xs font-bold leading-none mt-1">Rp ${p.price.toLocaleString()}</p></div>
+                        <button onclick="buy('${p.price}', '${p.link}')" class="bg-blue-600 px-5 py-2 rounded-xl font-black text-[10px] shadow-lg shadow-blue-600/30">BELI</button>
                     </div>`;
                 });
-                document.getElementById('productList').innerHTML = h || '<p class="text-center text-slate-700 text-xs py-10">Stok Lagi Kosong, Man.</p>';
+                document.getElementById('productList').innerHTML = h || '<p class="text-center text-slate-700 text-xs py-10">Stok Lagi Kosong.</p>';
             });
         }
 
@@ -254,9 +243,9 @@
             const u = auth.currentUser;
             const amt = parseInt(document.getElementById('topupAmount').value);
             const nm = document.getElementById('senderName').value;
-            if(!amt || !nm) return alert("Nominal & Nama jangan kosong!");
+            if(!amt || !nm) return alert("Isi nominal & nama!");
             db.ref('topup_requests').push({ uid: u.uid, email: u.email, amount: amt, name: nm, status: 'pending' });
-            alert("Request terkirim! Chat owner biar cepet di-ACC.");
+            alert("Berhasil! Tunggu Maman ACC saldo lu.");
         }
 
         function loadTopups() {
@@ -266,15 +255,12 @@
                     const r = c.val();
                     if(r.status === 'pending') {
                         h += `<div class="bg-slate-900 p-4 rounded-2xl flex justify-between items-center border border-slate-800">
-                            <div class="text-[10px]">
-                                <p class="font-black text-white text-xs">${r.name}</p>
-                                <p class="text-blue-400">Rp ${r.amount.toLocaleString()}</p>
-                            </div>
+                            <div class="text-[10px]"><p class="font-black text-white text-xs">${r.name}</p><p class="text-blue-400">Rp ${r.amount.toLocaleString()}</p></div>
                             <button onclick="acc('${c.key}', '${r.uid}', ${r.amount})" class="bg-green-600 text-black px-4 py-1.5 rounded-lg font-black text-[10px]">ACC</button>
                         </div>`;
                     }
                 });
-                document.getElementById('topupList').innerHTML = h || '<p class="text-center text-slate-700 text-xs">Antrian Kosong.</p>';
+                document.getElementById('topupList').innerHTML = h || '<p class="text-center text-slate-700 text-xs">Kosong.</p>';
             });
         }
 
@@ -289,10 +275,8 @@
                 const b = s.val() || 0;
                 if(b >= price) {
                     db.ref('users/' + uid + '/balance').set(b - price);
-                    alert("SUKSES! COPY LINK: " + link);
-                } else {
-                    alert("SALDO LU KURANG, MAN!");
-                }
+                    alert("SUKSES! Nih Link Filenya: " + link);
+                } else { alert("SALDO LU KURANG!"); }
             });
         }
 
@@ -302,7 +286,7 @@
             if(!t) return;
             const u = auth.currentUser;
             let target = u.uid;
-            if(u.email === ownerEmail) target = prompt("Target UID User (Cek Database):");
+            if(u.email === ownerEmail) target = prompt("Target UID User:");
             if(!target) return;
             db.ref('chats/' + target).push({ sender: u.email, text: t });
             document.getElementById('chatInput').value = '';
@@ -314,12 +298,7 @@
                 s.forEach(c => {
                     const m = c.val();
                     const isMe = m.sender === auth.currentUser.email;
-                    h += `<div class="flex ${isMe ? 'justify-end' : 'justify-start'}">
-                        <div class="${isMe ? 'bg-blue-600' : 'bg-slate-800'} p-3 rounded-2xl max-w-[80%] shadow-lg border border-white/5">
-                            <p class="font-black uppercase text-[8px] opacity-40 mb-1">${isMe ? 'Anda' : 'Owner'}</p>
-                            <p>${m.text}</p>
-                        </div>
-                    </div>`;
+                    h += `<div class="flex ${isMe ? 'justify-end' : 'justify-start'}"><div class="${isMe ? 'bg-blue-600' : 'bg-slate-800'} p-3 rounded-2xl max-w-[85%] border border-white/5 shadow-lg"><p class="font-black uppercase text-[7px] opacity-40 mb-1">${isMe ? 'Lu' : 'Owner'}</p><p; font-size: 11px;">${m.text}</p></div></div>`;
                 });
                 const container = document.getElementById('chatMessages');
                 container.innerHTML = h;
