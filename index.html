@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acel Store - Digital Market</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+</head>
+<body class="bg-gray-900 text-white font-sans">
+
+    <div id="loader" class="fixed inset-0 bg-black flex items-center justify-center z-50">
+        <p class="animate-bounce">Loading...</p>
+    </div>
+
+    <nav class="p-4 bg-gray-800 flex justify-between items-center hidden" id="nav">
+        <h1 class="text-xl font-bold text-blue-400">Acel Store</h1>
+        <div class="flex items-center gap-4">
+            <span id="userBalance" class="bg-green-600 px-3 py-1 rounded-full text-sm">Rp 0</span>
+            <button onclick="logout()" class="text-red-400 text-sm">Logout</button>
+        </div>
+    </nav>
+
+    <div class="max-w-md mx-auto p-6">
+        
+        <div id="auth-section" class="hidden">
+            <div class="bg-gray-800 p-8 rounded-2xl shadow-xl">
+                <h2 class="text-2xl font-bold mb-6 text-center">Selamat Datang</h2>
+                <input type="email" id="email" placeholder="Email" class="w-full p-3 mb-3 bg-gray-700 rounded-lg outline-none">
+                <input type="password" id="pass" placeholder="Password" class="w-full p-3 mb-4 bg-gray-700 rounded-lg outline-none">
+                
+                <div class="flex items-center gap-4 mb-4">
+                    <div id="captchaBox" class="bg-blue-600 px-4 py-2 rounded italic font-bold tracking-widest select-none"></div>
+                    <input type="text" id="captchaInput" placeholder="Kode" class="w-20 p-2 bg-gray-700 rounded-lg text-center">
+                </div>
+
+                <button onclick="handleLogin()" class="w-full bg-blue-600 p-3 rounded-lg font-bold hover:bg-blue-700 transition">Masuk / Daftar</button>
+            </div>
+        </div>
+
+        <div id="user-section" class="hidden space-y-6">
+            <div class="bg-gray-800 p-4 rounded-xl border border-gray-700">
+                <h3 class="font-bold mb-2">Top Up Saldo</h3>
+                <img src="https://files.catbox.moe/vx9780.jpg" class="w-full rounded-lg mb-3">
+                <input type="number" id="topupAmount" placeholder="Nominal" class="w-full p-2 mb-2 bg-gray-700 rounded border-none">
+                <input type="text" id="senderName" placeholder="Nama Pengirim" class="w-full p-2 mb-2 bg-gray-700 rounded border-none">
+                <button onclick="sendTopupRequest()" class="w-full bg-green-600 py-2 rounded font-bold">Konfirmasi Bayar</button>
+            </div>
+
+            <div id="productList" class="grid grid-cols-1 gap-4">
+                </div>
+
+            <div id="chatBox" class="bg-gray-800 p-4 rounded-xl hidden h-64 flex flex-col">
+                <h3 class="font-bold border-b border-gray-700 pb-2 mb-2">Chat Owner</h3>
+                <div id="chatMessages" class="flex-1 overflow-y-auto space-y-2 text-sm mb-2"></div>
+                <div class="flex gap-2">
+                    <input type="text" id="chatInput" class="flex-1 p-2 bg-gray-700 rounded text-xs" placeholder="Ketik pesan...">
+                    <button onclick="sendChat()" class="bg-blue-600 px-3 rounded text-xs">Kirim</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="admin-section" class="hidden space-y-6">
+            <h2 class="text-xl font-bold text-yellow-400">Owner Dashboard</h2>
+            
+            <div class="bg-gray-800 p-4 rounded-xl">
+                <h3 class="font-bold mb-2">Tambah Produk</h3>
+                <input type="text" id="pName" placeholder="Nama Produk" class="w-full p-2 mb-2 bg-gray-700 rounded text-sm">
+                <input type="number" id="pPrice" placeholder="Harga" class="w-full p-2 mb-2 bg-gray-700 rounded text-sm">
+                <input type="text" id="pLink" placeholder="Link File/Download" class="w-full p-2 mb-2 bg-gray-700 rounded text-sm">
+                <button onclick="addProduct()" class="w-full bg-yellow-600 py-2 rounded text-sm font-bold">Update Toko</button>
+            </div>
+
+            <div class="bg-gray-800 p-4 rounded-xl">
+                <h3 class="font-bold mb-2">Persetujuan Saldo</h3>
+                <div id="topupList" class="space-y-2 text-xs"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // --- CONFIG FIREBASE (GANTI DENGAN PUNYA LU) ---
+        const firebaseConfig = {
+            apiKey: "AIzaSyDAxf5XPBWygyF1KlHV3Jd21vIFxwuzaAg",
+            authDomain: "toko-manan.firebaseapp.com",
+            databaseURL: "https://toko-manan-default-rtdb.asia-southeast1.firebasedatabase.app/",
+            projectId: "toko-manan",
+            storageBucket: "toko-manan.firebasestorage.app",
+            messagingSenderId: "660878265832",
+            appId: "1:660878265832:web:e290c031864de14445285d"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.database();
+
+        // --- AUTH & CAPTCHA ---
+        let currentCaptcha = "";
+        function genCaptcha() {
+            currentCaptcha = Math.random().toString(36).substring(2, 6).toUpperCase();
+            document.getElementById('captchaBox').innerText = currentCaptcha;
+        }
+        genCaptcha();
+
+        function handleLogin() {
+            const email = document.getElementById('email').value;
+            const pass = document.getElementById('pass').value;
+            const capInput = document.getElementById('captchaInput').value;
+
+            if(capInput !== currentCaptcha) return alert("Captcha salah!");
+
+            auth.signInWithEmailAndPassword(email, pass).catch(() => {
+                auth.createUserWithEmailAndPassword(email, pass);
+            });
+        }
+
+        // --- CORE LOGIC ---
+        auth.onAuthStateChanged(user => {
+            document.getElementById('loader').classList.add('hidden');
+            if (user) {
+                document.getElementById('auth-section').classList.add('hidden');
+                document.getElementById('nav').classList.remove('hidden');
+                checkUserRole(user);
+            } else {
+                document.getElementById('auth-section').classList.remove('hidden');
+                document.getElementById('user-section').classList.add('hidden');
+                document.getElementById('admin-section').classList.add('hidden');
+                document.getElementById('nav').classList.add('hidden');
+            }
+        });
+
+        function checkUserRole(user) {
+            // Owner Email (Ganti dengan email lu)
+            const ownerEmail = "ilmancahyosyabani1@gmail.com"; 
+            
+            if(user.email === ownerEmail) {
+                document.getElementById('admin-section').classList.remove('hidden');
+                loadTopupRequests();
+            } else {
+                document.getElementById('user-section').classList.remove('hidden');
+            }
+            loadProducts();
+            syncBalance(user.uid);
+            loadChats(user.uid);
+        }
+
+        function syncBalance(uid) {
+            db.ref('users/' + uid + '/balance').on('value', snap => {
+                const bal = snap.val() || 0;
+                document.getElementById('userBalance').innerText = "Rp " + bal.toLocaleString();
+            });
+        }
+
+        // --- PRODUCT & TOPUP ---
+        function addProduct() {
+            const name = document.getElementById('pName').value;
+            const price = parseInt(document.getElementById('pPrice').value);
+            const link = document.getElementById('pLink').value;
+            db.ref('products').push({ name, price, link });
+            alert("Produk ditambahkan!");
+        }
+
+        function loadProducts() {
+            db.ref('products').on('value', snap => {
+                let html = '';
+                snap.forEach(child => {
+                    const p = child.val();
+                    html += `
+                        <div class="bg-gray-800 p-4 rounded-xl flex justify-between items-center">
+                            <div>
+                                <p class="font-bold">${p.name}</p>
+                                <p class="text-green-400 text-sm">Rp ${p.price.toLocaleString()}</p>
+                            </div>
+                            <button onclick="buyProduct('${p.price}', '${p.link}')" class="bg-blue-600 px-4 py-1 rounded text-sm">Beli</button>
+                        </div>
+                    `;
+                });
+                document.getElementById('productList').innerHTML = html;
+            });
+        }
+
+        function sendTopupRequest() {
+            const uid = auth.currentUser.uid;
+            const email = auth.currentUser.email;
+            const amount = parseInt(document.getElementById('topupAmount').value);
+            const name = document.getElementById('senderName').value;
+            db.ref('topup_requests').push({ uid, email, amount, name, status: 'pending' });
+            alert("Permintaan dikirim! Tunggu owner.");
+        }
+
+        function loadTopupRequests() {
+            db.ref('topup_requests').on('value', snap => {
+                let html = '';
+                snap.forEach(child => {
+                    const r = child.val();
+                    if(r.status === 'pending') {
+                        html += `
+                            <div class="bg-gray-700 p-2 rounded flex justify-between items-center">
+                                <span>${r.name} (Rp ${r.amount})</span>
+                                <button onclick="accTopup('${child.key}', '${r.uid}', ${r.amount})" class="bg-green-600 px-2 rounded">ACC</button>
+                            </div>
+                        `;
+                    }
+                });
+                document.getElementById('topupList').innerHTML = html;
+            });
+        }
+
+        function accTopup(key, uid, amount) {
+            db.ref('users/' + uid + '/balance').transaction(current => (current || 0) + amount);
+            db.ref('topup_requests/' + key).update({ status: 'success' });
+        }
+
+        function buyProduct(price, link) {
+            const uid = auth.currentUser.uid;
+            db.ref('users/' + uid + '/balance').once('value', snap => {
+                const bal = snap.val() || 0;
+                if(bal >= price) {
+                    db.ref('users/' + uid + '/balance').set(bal - price);
+                    alert("Berhasil! Link Anda: " + link);
+                    document.getElementById('chatBox').classList.remove('hidden');
+                } else {
+                    alert("Saldo Kurang!");
+                }
+            });
+        }
+
+        // --- CHAT SYSTEM ---
+        function sendChat() {
+            const text = document.getElementById('chatInput').value;
+            const uid = auth.currentUser.uid;
+            db.ref('chats/' + uid).push({ sender: auth.currentUser.email, text, time: Date.now() });
+            document.getElementById('chatInput').value = '';
+        }
+
+        function loadChats(uid) {
+            db.ref('chats/' + uid).on('value', snap => {
+                let html = '';
+                snap.forEach(child => {
+                    const c = child.val();
+                    const isMe = c.sender === auth.currentUser.email;
+                    html += `<div class="${isMe ? 'text-right' : 'text-left'}">
+                        <span class="bg-gray-700 px-2 py-1 rounded text-xs inline-block">${c.text}</span>
+                    </div>`;
+                });
+                document.getElementById('chatMessages').innerHTML = html;
+            });
+        }
+
+        function logout() { auth.signOut(); }
+    </script>
+</body>
+</html>
