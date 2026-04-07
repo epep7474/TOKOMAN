@@ -3,124 +3,139 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MAMAN STORE - Digital Center</title>
+    <title>MAMAN STORE - Digital & Scripts</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     <style>
-        body { background: #020617; color: #f8fafc; font-family: sans-serif; }
-        .glass { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.1); }
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap');
+        body { background: #020617; color: #f1f5f9; font-family: 'Plus Jakarta Sans', sans-serif; }
+        .glass { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.05); }
+        .cyber-border { border-left: 4px solid #2563eb; }
         .btn-blue { background: #2563eb; transition: 0.3s; }
-        .btn-blue:hover { background: #1d4ed8; box-shadow: 0 0 15px rgba(37, 99, 235, 0.4); }
+        .btn-blue:hover { background: #1d4ed8; box-shadow: 0 0 20px rgba(37,99,235,0.4); }
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-thumb { background: #2563eb; border-radius: 10px; }
     </style>
 </head>
 <body class="min-h-screen">
 
-    <div id="loader" class="fixed inset-0 bg-slate-950 flex flex-col items-center justify-center z-[99]">
-        <div class="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+    <div id="loader" class="fixed inset-0 bg-slate-950 flex flex-col items-center justify-center z-[100]">
+        <div class="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mb-4"></div>
+        <p class="text-blue-500 font-black tracking-widest uppercase">MAMAN STORE</p>
     </div>
 
     <nav class="p-4 glass sticky top-0 z-40 hidden" id="nav">
         <div class="max-w-4xl mx-auto flex justify-between items-center">
-            <h1 class="text-xl font-bold text-blue-500 italic">MAMAN<span class="text-white font-black">STORE</span></h1>
+            <h1 class="text-xl font-black text-blue-500 italic">MAMAN<span class="text-white">STORE</span></h1>
             <div class="flex items-center gap-4">
                 <div class="text-right">
-                    <p class="text-[10px] text-slate-500 uppercase font-bold">Saldo</p>
+                    <p class="text-[9px] text-slate-500 font-bold uppercase leading-none">Saldo Lu</p>
                     <p id="userBalance" class="text-green-400 font-black text-sm">Rp 0</p>
                 </div>
-                <button onclick="logout()" class="text-red-500 hover:text-red-400 text-lg">
-                    <i class="fa-solid fa-power-off"></i>
-                </button>
+                <button onclick="logout()" class="text-red-500 hover:scale-110 transition"><i class="fa-solid fa-power-off"></i></button>
             </div>
         </div>
     </nav>
 
     <div class="max-w-md mx-auto p-5">
         
-        <div id="auth-section" class="hidden mt-12">
-            <div class="glass p-8 rounded-[2rem] shadow-2xl border-t-2 border-blue-600">
+        <div id="login-section" class="hidden mt-10">
+            <div class="glass p-8 rounded-[2.5rem] shadow-2xl border-t-2 border-blue-600">
                 <div class="text-center mb-8">
-                    <h2 class="text-3xl font-black mb-2">MASUK / DAFTAR</h2>
-                    <p class="text-slate-400 text-xs">Akun otomatis dibuat jika belum terdaftar.</p>
+                    <h2 class="text-3xl font-black italic">LOGIN</h2>
+                    <p class="text-slate-400 text-xs mt-1">Masuk buat belanja di Maman Store.</p>
                 </div>
-                
                 <div class="space-y-4">
-                    <div>
-                        <label class="text-[10px] font-bold text-slate-500 ml-2 uppercase tracking-widest">Email</label>
-                        <input type="email" id="email" class="w-full p-4 bg-slate-900 rounded-2xl outline-none border border-slate-800 focus:border-blue-600 transition">
-                    </div>
-                    <div>
-                        <label class="text-[10px] font-bold text-slate-500 ml-2 uppercase tracking-widest">Password</label>
-                        <input type="password" id="pass" class="w-full p-4 bg-slate-900 rounded-2xl outline-none border border-slate-800 focus:border-blue-600 transition">
-                    </div>
+                    <input type="email" id="login-email" placeholder="Email Google" class="w-full p-4 bg-slate-900 rounded-2xl border border-slate-800 outline-none focus:border-blue-600">
+                    <input type="password" id="login-pass" placeholder="Password" class="w-full p-4 bg-slate-900 rounded-2xl border border-slate-800 outline-none focus:border-blue-600">
+                    <button onclick="handleLogin()" class="btn-blue w-full py-4 rounded-2xl font-black">GAS MASUK</button>
+                    <p class="text-center text-xs text-slate-500">Belum punya akun? <button onclick="showAuth('register')" class="text-blue-500 font-bold underline">Daftar di sini</button></p>
+                </div>
+            </div>
+        </div>
+
+        <div id="register-section" class="hidden mt-10">
+            <div class="glass p-8 rounded-[2.5rem] shadow-2xl border-t-2 border-green-600">
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl font-black italic text-green-500">DAFTAR</h2>
+                    <p class="text-slate-400 text-xs mt-1">Bikin akun Maman Store dulu, Man.</p>
+                </div>
+                <div class="space-y-4">
+                    <input type="email" id="reg-email" placeholder="Email Baru" class="w-full p-4 bg-slate-900 rounded-2xl border border-slate-800 outline-none focus:border-green-600">
+                    <input type="password" id="reg-pass" placeholder="Password Baru" class="w-full p-4 bg-slate-900 rounded-2xl border border-slate-800 outline-none focus:border-green-600">
                     
                     <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800 flex items-center justify-between">
-                        <div id="captchaBox" class="text-blue-500 font-mono font-black italic text-xl tracking-widest select-none"></div>
-                        <input type="text" id="captchaInput" placeholder="KODE" class="w-20 bg-transparent border-b border-blue-900 text-center outline-none font-bold uppercase text-blue-400">
+                        <div id="captchaBox" class="text-blue-500 font-mono font-black italic text-xl tracking-widest"></div>
+                        <input type="text" id="captchaInput" placeholder="KODE" class="w-20 bg-transparent text-center border-b border-blue-900 text-blue-400 outline-none font-bold uppercase">
                     </div>
 
-                    <button onclick="handleAuth()" class="btn-blue w-full py-4 rounded-2xl font-black text-white shadow-xl">GAS SEKARANG</button>
+                    <button onclick="handleRegister()" class="w-full bg-green-600 py-4 rounded-2xl font-black hover:bg-green-700 transition">DAFTAR SEKARANG</button>
+                    <p class="text-center text-xs text-slate-500">Udah ada akun? <button onclick="showAuth('login')" class="text-blue-500 font-bold underline">Login aja</button></p>
                 </div>
             </div>
         </div>
 
         <div id="user-section" class="hidden space-y-6">
-            <div class="glass p-6 rounded-[2rem]">
-                <h3 class="font-black text-xs text-blue-500 mb-4 tracking-widest uppercase">Metode Top Up QRIS</h3>
-                <div class="bg-white p-2 rounded-2xl mb-4 max-w-[200px] mx-auto">
-                    <img src="https://files.catbox.moe/vx9780.jpg" class="w-full">
+            <div class="glass p-6 rounded-[2rem] cyber-border">
+                <h3 class="font-black text-xs text-blue-500 mb-4 tracking-tighter uppercase">Metode Top Up QRIS</h3>
+                <div class="bg-white p-2 rounded-2xl mb-5 flex justify-center shadow-lg shadow-white/5">
+                    <img src="https://files.catbox.moe/vx9780.jpg" class="w-48">
                 </div>
                 <div class="space-y-3">
-                    <input type="number" id="topupAmount" placeholder="Nominal Saldo" class="w-full p-3.5 bg-slate-900 rounded-xl outline-none text-sm border border-slate-800">
-                    <input type="text" id="senderName" placeholder="Nama Pengirim (Cth: Maman)" class="w-full p-3.5 bg-slate-900 rounded-xl outline-none text-sm border border-slate-800">
-                    <button onclick="sendTopup()" class="w-full bg-green-600 py-3.5 rounded-xl font-black text-xs hover:bg-green-500 transition">KIRIM KONFIRMASI</button>
+                    <input type="number" id="topupAmount" placeholder="Nominal" class="w-full p-3.5 bg-slate-900 rounded-xl outline-none border border-slate-800 text-sm">
+                    <input type="text" id="senderName" placeholder="Nama Pengirim (Cth: Ilman)" class="w-full p-3.5 bg-slate-900 rounded-xl outline-none border border-slate-800 text-sm">
+                    <button onclick="sendTopup()" class="w-full bg-green-600 py-3.5 rounded-xl font-black text-xs hover:bg-green-500 shadow-lg shadow-green-600/20">KONFIRMASI BAYAR</button>
                 </div>
             </div>
 
-            <h2 class="text-lg font-black italic tracking-wider px-2">DAFTAR PRODUK</h2>
+            <h2 class="text-xl font-black italic tracking-wider px-2">LIST PRODUK</h2>
             <div id="productList" class="grid gap-3"></div>
 
-            <button onclick="toggleChat()" class="fixed bottom-6 right-6 w-14 h-14 bg-blue-600 rounded-2xl shadow-xl flex items-center justify-center text-xl z-50">
+            <button onclick="toggleChat()" class="fixed bottom-6 right-6 w-14 h-14 bg-blue-600 rounded-2xl shadow-2xl flex items-center justify-center text-xl z-50">
                 <i class="fa-solid fa-headset"></i>
             </button>
 
-            <div id="chatBox" class="fixed bottom-24 right-6 left-6 max-w-sm glass rounded-[2rem] hidden flex flex-col h-[400px] z-50 overflow-hidden shadow-2xl border border-white/10">
-                <div class="p-4 bg-blue-600 font-bold flex justify-between items-center text-sm">
-                    <span>Chat Hubungi Owner</span>
+            <div id="chatBox" class="fixed bottom-24 right-6 left-6 max-w-sm glass rounded-[2.5rem] hidden flex flex-col h-[400px] z-50 overflow-hidden shadow-2xl border border-white/10">
+                <div class="p-4 bg-blue-600 flex justify-between items-center text-sm font-bold uppercase tracking-widest">
+                    <span>Chat Owner</span>
                     <button onclick="toggleChat()"><i class="fa-solid fa-xmark"></i></button>
                 </div>
-                <div id="chatMessages" class="flex-1 p-4 overflow-y-auto space-y-3 text-[11px]"></div>
-                <div class="p-3 bg-slate-900 flex gap-2">
-                    <input type="text" id="chatInput" class="flex-1 bg-slate-800 p-2.5 rounded-xl outline-none text-xs" placeholder="Ketik pesan...">
-                    <button onclick="sendChat()" class="bg-blue-600 px-4 rounded-xl"><i class="fa-solid fa-paper-plane text-xs"></i></button>
+                <div id="chatMessages" class="flex-1 p-5 overflow-y-auto space-y-4 text-[11px]"></div>
+                <div class="p-4 bg-slate-900/50 flex gap-2">
+                    <input type="text" id="chatInput" class="flex-1 bg-slate-800 p-3 rounded-xl outline-none text-xs border border-slate-700" placeholder="Pesan anda...">
+                    <button onclick="sendChat()" class="bg-blue-600 w-10 h-10 rounded-xl flex items-center justify-center"><i class="fa-solid fa-paper-plane text-xs"></i></button>
                 </div>
             </div>
         </div>
 
         <div id="admin-section" class="hidden space-y-6">
-            <div class="bg-blue-600 p-4 rounded-2xl text-center font-black text-sm">OWNER PANEL: MAMAN</div>
+            <div class="bg-blue-600 p-4 rounded-2xl text-center font-black text-sm italic tracking-widest uppercase shadow-lg shadow-blue-600/30">
+                <i class="fa-solid fa-crown mr-2"></i> Owner Maman Panel
+            </div>
             
-            <div class="glass p-6 rounded-[2rem]">
-                <h3 class="font-bold text-xs mb-4 text-blue-400">TAMBAH BARANG</h3>
+            <div class="glass p-6 rounded-[2rem] border-t-2 border-blue-500">
+                <h3 class="font-bold text-xs mb-4 text-blue-400 uppercase tracking-widest">Update Barang Toko</h3>
                 <div class="space-y-3">
-                    <input type="text" id="pName" placeholder="Nama Produk" class="w-full p-3 bg-slate-900 rounded-xl text-xs outline-none">
-                    <input type="number" id="pPrice" placeholder="Harga" class="w-full p-3 bg-slate-900 rounded-xl text-xs outline-none">
-                    <input type="text" id="pLink" placeholder="Link Download/File" class="w-full p-3 bg-slate-900 rounded-xl text-xs outline-none">
-                    <button onclick="addProduct()" class="w-full bg-blue-600 py-3 rounded-xl font-bold text-xs">PUBLIKASIKAN</button>
+                    <input type="text" id="pName" placeholder="Nama Produk" class="w-full p-3 bg-slate-900 rounded-xl text-xs outline-none border border-slate-800">
+                    <input type="number" id="pPrice" placeholder="Harga Jual" class="w-full p-3 bg-slate-900 rounded-xl text-xs outline-none border border-slate-800">
+                    <input type="text" id="pLink" placeholder="Link File Download" class="w-full p-3 bg-slate-900 rounded-xl text-xs outline-none border border-slate-800">
+                    <button onclick="addProduct()" class="w-full bg-blue-600 py-3 rounded-xl font-bold text-xs shadow-lg">POSTING KE TOKO</button>
                 </div>
             </div>
 
-            <div class="glass p-6 rounded-[2rem]">
-                <h3 class="font-bold text-xs mb-4 text-green-500 italic uppercase tracking-widest">Antrian Saldo</h3>
+            <div class="glass p-6 rounded-[2rem] border-l-4 border-green-500">
+                <h3 class="font-black text-xs mb-4 text-green-500 uppercase tracking-widest italic">Konfirmasi Saldo</h3>
                 <div id="topupList" class="space-y-3"></div>
             </div>
         </div>
+
     </div>
 
     <script>
-        // CONFIG FIREBASE MILIK MAMAN
+        // CONFIG FIREBASE (FIXED API KEY - TANPA SPASI!)
         const firebaseConfig = {
             apiKey: "AIzaSyDAxf5XPBWygyF1KlHV3Jd21vIFxwuzaAg",
             authDomain: "toko-manan.firebaseapp.com",
@@ -137,47 +152,53 @@
 
         const ownerEmail = "ilmancahyosyabani1@gmail.com"; 
 
+        // --- AUTH UI SWITCHER ---
+        function showAuth(mode) {
+            document.getElementById('login-section').classList.add('hidden');
+            document.getElementById('register-section').classList.add('hidden');
+            document.getElementById(mode + '-section').classList.remove('hidden');
+            if(mode === 'register') genCap();
+        }
+
         // --- CAPTCHA ---
         let currentCap = "";
         function genCap() {
             currentCap = Math.random().toString(36).substring(2, 6).toUpperCase();
             document.getElementById('captchaBox').innerText = currentCap;
         }
-        genCap();
 
-        // --- LOGIC GABUNGAN (LOGIN & REGISTER) ---
-        function handleAuth() {
-            const email = document.getElementById('email').value;
-            const pass = document.getElementById('pass').value;
+        // --- AUTH ACTIONS ---
+        function handleLogin() {
+            const email = document.getElementById('login-email').value;
+            const pass = document.getElementById('login-pass').value;
+            if(!email || !pass) return alert("Isi dulu, Man!");
+            auth.signInWithEmailAndPassword(email, pass).catch(err => alert("Password salah atau Akun belom ada!"));
+        }
+
+        function handleRegister() {
+            const email = document.getElementById('reg-email').value;
+            const pass = document.getElementById('reg-pass').value;
             const cin = document.getElementById('captchaInput').value;
 
             if(cin.toUpperCase() !== currentCap) {
-                alert("CAPTCHA SALAH!");
+                alert("KODE CAPTCHA SALAH!");
                 genCap();
                 return;
             }
+            if(!email || !pass) return alert("Isi email & pass baru!");
 
-            if(!email || !pass) return alert("Isi email & pass!");
-
-            // Coba Login dulu
-            auth.signInWithEmailAndPassword(email, pass).catch((error) => {
-                // Kalau gagal (akun blm ada), otomatis Register
-                if (error.code === 'auth/user-not-found') {
-                    auth.createUserWithEmailAndPassword(email, pass).then(u => {
-                        db.ref('users/' + u.user.uid).set({ email, balance: 0 });
-                        alert("Akun berhasil dibuat!");
-                    }).catch(err => alert("Error: " + err.message));
-                } else {
-                    alert("Password Salah atau Error: " + error.message);
-                }
-            });
+            auth.createUserWithEmailAndPassword(email, pass).then(u => {
+                db.ref('users/' + u.user.uid).set({ email, balance: 0 });
+                alert("Daftar Sukses! Langsung masuk.");
+            }).catch(err => alert("Error Daftar: " + err.message));
         }
 
         // --- OBSERVER ---
         auth.onAuthStateChanged(user => {
             document.getElementById('loader').classList.add('hidden');
             if (user) {
-                document.getElementById('auth-section').classList.add('hidden');
+                document.getElementById('login-section').classList.add('hidden');
+                document.getElementById('register-section').classList.add('hidden');
                 document.getElementById('nav').classList.remove('hidden');
                 if(user.email === ownerEmail) {
                     document.getElementById('admin-section').classList.remove('hidden');
@@ -191,7 +212,7 @@
                 loadBalance(user.uid);
                 loadChats(user.uid);
             } else {
-                document.getElementById('auth-section').classList.remove('hidden');
+                showAuth('login');
                 document.getElementById('nav').classList.add('hidden');
                 document.getElementById('user-section').classList.add('hidden');
                 document.getElementById('admin-section').classList.add('hidden');
@@ -210,9 +231,9 @@
             const name = document.getElementById('pName').value;
             const price = parseInt(document.getElementById('pPrice').value);
             const link = document.getElementById('pLink').value;
-            if(!name || !price) return;
+            if(!name || !price) return alert("Isi data produk!");
             db.ref('products').push({ name, price, link });
-            alert("Berhasil Tambah!");
+            alert("Sip, Produk Udah Masuk!");
         }
 
         function loadProducts() {
@@ -220,12 +241,12 @@
                 let h = '';
                 s.forEach(c => {
                     const p = c.val();
-                    h += `<div class="glass p-5 rounded-3xl flex justify-between items-center">
-                        <div><p class="font-bold text-sm">${p.name}</p><p class="text-green-400 text-xs font-black">Rp ${p.price.toLocaleString()}</p></div>
-                        <button onclick="buy('${p.price}', '${p.link}')" class="bg-blue-600 px-5 py-2 rounded-xl font-bold text-[10px]">BELI</button>
+                    h += `<div class="glass p-5 rounded-[1.8rem] flex justify-between items-center border border-white/5 shadow-xl">
+                        <div><p class="font-black text-sm italic">${p.name}</p><p class="text-green-400 text-xs font-bold">Rp ${p.price.toLocaleString()}</p></div>
+                        <button onclick="buy('${p.price}', '${p.link}')" class="bg-blue-600 px-6 py-2 rounded-xl font-black text-[10px] shadow-lg shadow-blue-600/30">BELI</button>
                     </div>`;
                 });
-                document.getElementById('productList').innerHTML = h || '<p class="text-center text-slate-600 text-xs mt-10">Stok Kosong.</p>';
+                document.getElementById('productList').innerHTML = h || '<p class="text-center text-slate-700 text-xs py-10">Stok Lagi Kosong, Man.</p>';
             });
         }
 
@@ -233,9 +254,9 @@
             const u = auth.currentUser;
             const amt = parseInt(document.getElementById('topupAmount').value);
             const nm = document.getElementById('senderName').value;
-            if(!amt || !nm) return alert("Isi Nominal & Nama Pengirim!");
+            if(!amt || !nm) return alert("Nominal & Nama jangan kosong!");
             db.ref('topup_requests').push({ uid: u.uid, email: u.email, amount: amt, name: nm, status: 'pending' });
-            alert("Tunggu di-ACC Maman!");
+            alert("Request terkirim! Chat owner biar cepet di-ACC.");
         }
 
         function loadTopups() {
@@ -253,7 +274,7 @@
                         </div>`;
                     }
                 });
-                document.getElementById('topupList').innerHTML = h || '<p class="text-center text-slate-700 text-xs">Kosong.</p>';
+                document.getElementById('topupList').innerHTML = h || '<p class="text-center text-slate-700 text-xs">Antrian Kosong.</p>';
             });
         }
 
@@ -270,7 +291,7 @@
                     db.ref('users/' + uid + '/balance').set(b - price);
                     alert("SUKSES! COPY LINK: " + link);
                 } else {
-                    alert("SALDO KURANG!");
+                    alert("SALDO LU KURANG, MAN!");
                 }
             });
         }
@@ -280,11 +301,8 @@
             const t = document.getElementById('chatInput').value;
             if(!t) return;
             const u = auth.currentUser;
-            // Jika admin, tanya UID target di alert (simpel buat single file)
             let target = u.uid;
-            if(u.email === ownerEmail) {
-                target = prompt("UID Target Chat (Lihat di Database):");
-            }
+            if(u.email === ownerEmail) target = prompt("Target UID User (Cek Database):");
             if(!target) return;
             db.ref('chats/' + target).push({ sender: u.email, text: t });
             document.getElementById('chatInput').value = '';
@@ -297,8 +315,8 @@
                     const m = c.val();
                     const isMe = m.sender === auth.currentUser.email;
                     h += `<div class="flex ${isMe ? 'justify-end' : 'justify-start'}">
-                        <div class="${isMe ? 'bg-blue-600' : 'bg-slate-800'} p-2.5 rounded-2xl max-w-[80%]">
-                            <p class="leading-relaxed font-bold uppercase text-[8px] opacity-40 mb-1">${isMe ? 'Anda' : 'Owner'}</p>
+                        <div class="${isMe ? 'bg-blue-600' : 'bg-slate-800'} p-3 rounded-2xl max-w-[80%] shadow-lg border border-white/5">
+                            <p class="font-black uppercase text-[8px] opacity-40 mb-1">${isMe ? 'Anda' : 'Owner'}</p>
                             <p>${m.text}</p>
                         </div>
                     </div>`;
