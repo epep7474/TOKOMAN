@@ -19,7 +19,7 @@
         ::-webkit-scrollbar { width: 0px; }
     </style>
 </head>
-<body class="min-h-screen pb-24">
+<body class="min-h-screen pb-24 text-sm">
     <div id="loader" class="fixed inset-0 bg-slate-950 flex flex-col items-center justify-center z-[100]">
         <div class="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
     </div>
@@ -40,9 +40,9 @@
         <div id="login-section" class="hidden mt-10">
             <div class="glass p-8 rounded-[2.5rem] border-t-2 border-blue-600 shadow-2xl">
                 <h2 class="text-xl font-black text-center mb-6 uppercase text-blue-500 italic">Login</h2>
-                <input type="email" id="login-email" placeholder="Email" class="w-full p-4 mb-4 bg-slate-900 rounded-2xl border border-slate-800 outline-none text-sm">
-                <input type="password" id="login-pass" placeholder="Password" class="w-full p-4 mb-6 bg-slate-900 rounded-2xl border border-slate-800 outline-none text-sm">
-                <button onclick="handleLogin()" class="btn-blue w-full py-4 rounded-2xl font-black uppercase text-xs tracking-widest">Masuk</button>
+                <input type="email" id="login-email" placeholder="Email" class="w-full p-4 mb-4 bg-slate-900 rounded-2xl border border-slate-800 outline-none">
+                <input type="password" id="login-pass" placeholder="Password" class="w-full p-4 bg-slate-900 rounded-2xl border border-slate-800 outline-none">
+                <button onclick="handleLogin()" class="btn-blue w-full py-4 rounded-2xl font-black uppercase text-xs tracking-widest shadow-lg">Gas Masuk</button>
                 <p class="text-center text-[10px] text-slate-500 font-bold mt-4 uppercase">Belum ada akun? <button onclick="showAuth('register')" class="text-blue-500 underline">Daftar</button></p>
             </div>
         </div>
@@ -50,8 +50,8 @@
         <div id="register-section" class="hidden mt-10">
             <div class="glass p-8 rounded-[2.5rem] border-t-2 border-green-600">
                 <h2 class="text-xl font-black text-center mb-6 uppercase text-green-500">Daftar</h2>
-                <input type="email" id="reg-email" placeholder="Email Baru" class="w-full p-4 mb-4 bg-slate-900 rounded-2xl border border-slate-800 outline-none text-sm">
-                <input type="password" id="reg-pass" placeholder="Password Baru" class="w-full p-4 mb-4 bg-slate-900 rounded-2xl border border-slate-800 outline-none text-sm">
+                <input type="email" id="reg-email" placeholder="Email Baru" class="w-full p-4 mb-4 bg-slate-900 rounded-2xl border border-slate-800 outline-none">
+                <input type="password" id="reg-pass" placeholder="Password Baru" class="w-full p-4 bg-slate-900 rounded-2xl border border-slate-800 outline-none">
                 <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800 flex items-center justify-between mb-6">
                     <div id="captchaBox" class="text-blue-500 font-black tracking-widest text-lg italic"></div>
                     <input type="text" id="captchaInput" placeholder="KODE" class="w-16 bg-transparent text-center border-b border-blue-900 text-blue-400 outline-none font-bold uppercase text-xs">
@@ -63,38 +63,62 @@
 
         <div id="user-section" class="hidden">
             <div id="page-store" class="space-y-4">
-                <div id="productList" class="grid grid-cols-2 gap-3 mt-2">
-                    </div>
+                <div id="productList" class="grid grid-cols-2 gap-3 mt-2"></div>
             </div>
 
             <div id="page-history" class="hidden space-y-4">
-                <h2 class="text-[10px] font-black italic tracking-widest uppercase text-green-400 px-2">History Pembelian</h2>
                 <div id="myPurchaseList" class="grid gap-3"></div>
             </div>
 
-            <div id="page-profile" class="hidden space-y-6">
-                <div class="glass p-6 rounded-[2rem] text-center">
-                    <h3 class="font-black text-[10px] text-blue-500 mb-4 uppercase italic">Scan Untuk Top Up</h3>
+            <div id="page-profile" class="hidden space-y-4 pb-10">
+                <div class="glass p-6 rounded-[2rem] text-center border-t-4 border-blue-600">
+                    <h3 class="font-black text-[10px] text-blue-500 mb-4 uppercase italic">Form Top Up</h3>
                     <img src="https://files.catbox.moe/vx9780.jpg" class="w-40 mx-auto rounded-2xl mb-4 shadow-xl border border-white/5">
                     <div class="space-y-3">
                         <input type="number" id="topupAmount" placeholder="Nominal Rp" class="w-full p-3 bg-slate-900 rounded-xl outline-none text-xs border border-slate-800">
                         <input type="text" id="senderName" placeholder="Nama Pengirim" class="w-full p-3 bg-slate-900 rounded-xl outline-none text-xs border border-slate-800">
-                        <button onclick="sendTopup()" class="w-full bg-blue-600 py-3 rounded-xl font-black text-[10px] uppercase">Kirim Laporan</button>
+                        <button onclick="sendTopup()" class="w-full bg-blue-600 py-3 rounded-xl font-black text-[10px] uppercase shadow-lg shadow-blue-600/20">Konfirmasi Pembayaran</button>
+                    </div>
+                </div>
+
+                <div class="glass p-6 rounded-[2rem] border-l-4 border-blue-500">
+                    <h3 class="text-xs font-black uppercase italic mb-4 text-blue-400 tracking-widest"><i class="fa-solid fa-circle-info mr-2"></i>Tutorial Top Up</h3>
+                    <div class="space-y-4 text-[11px] leading-relaxed">
+                        <div class="flex gap-3">
+                            <span class="w-5 h-5 bg-blue-600 rounded-full flex items-center justify-center shrink-0 font-bold">1</span>
+                            <p>Scan <span class="text-blue-400 font-bold">QRIS MAMAN STORE</span> yang ada di atas pake aplikasi bank atau e-wallet lu.</p>
+                        </div>
+                        <div class="flex gap-3">
+                            <span class="w-5 h-5 bg-blue-600 rounded-full flex items-center justify-center shrink-0 font-bold">2</span>
+                            <p>Masukkan nominal uang sesuai dengan jumlah saldo yang lu mau beli.</p>
+                        </div>
+                        <div class="flex gap-3">
+                            <span class="w-5 h-5 bg-blue-600 rounded-full flex items-center justify-center shrink-0 font-bold">3</span>
+                            <p>Setelah transfer berhasil, inget <span class="text-green-400 font-bold">Nama Pengirim</span> yang lu pake buat transfer.</p>
+                        </div>
+                        <div class="flex gap-3">
+                            <span class="w-5 h-5 bg-blue-600 rounded-full flex items-center justify-center shrink-0 font-bold">4</span>
+                            <p>Isi form di atas: <span class="italic">Nominal</span> dan <span class="italic">Nama Pengirim</span>, terus klik tombol <span class="text-blue-400">Konfirmasi</span>.</p>
+                        </div>
+                        <div class="flex gap-3">
+                            <span class="w-5 h-5 bg-blue-600 rounded-full flex items-center justify-center shrink-0 font-bold">5</span>
+                            <p>Sabar dikit, tunggu Owner (<span class="text-blue-400 font-bold">Ilman Cahyo</span>) cek mutasi dan ACC saldo lu.</p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
         <div id="bottom-nav" class="fixed bottom-0 left-0 right-0 glass h-16 flex justify-around items-center px-4 z-50 hidden border-t border-white/5">
-            <button onclick="switchPage('store')" id="nav-store" class="flex flex-col items-center gap-1 text-slate-500 py-2 px-4 transition-all">
+            <button onclick="switchPage('store')" id="nav-store" class="flex flex-col items-center gap-1 text-slate-500 py-2 transition-all">
                 <i class="fa-solid fa-shop text-lg"></i>
                 <span class="text-[8px] font-bold uppercase">Toko</span>
             </button>
-            <button onclick="switchPage('history')" id="nav-history" class="flex flex-col items-center gap-1 text-slate-500 py-2 px-4 transition-all">
+            <button onclick="switchPage('history')" id="nav-history" class="flex flex-col items-center gap-1 text-slate-500 py-2 transition-all">
                 <i class="fa-solid fa-clock-rotate-left text-lg"></i>
                 <span class="text-[8px] font-bold uppercase">Transaksi</span>
             </button>
-            <button onclick="switchPage('profile')" id="nav-profile" class="flex flex-col items-center gap-1 text-slate-500 py-2 px-4 transition-all">
+            <button onclick="switchPage('profile')" id="nav-profile" class="flex flex-col items-center gap-1 text-slate-500 py-2 transition-all">
                 <i class="fa-solid fa-wallet text-lg"></i>
                 <span class="text-[8px] font-bold uppercase">Top Up</span>
             </button>
@@ -104,12 +128,12 @@
             <div class="bg-blue-600 p-3 rounded-xl text-center font-black text-xs uppercase tracking-widest italic shadow-lg">Admin Panel Maman</div>
             <div class="glass p-5 rounded-[2rem]">
                 <h3 class="font-bold text-[10px] mb-4 text-blue-400 uppercase">Input Barang</h3>
-                <div class="space-y-2 text-xs">
-                    <input type="text" id="pName" placeholder="Nama Barang" class="w-full p-3 bg-slate-900 rounded-xl outline-none">
-                    <input type="number" id="pPrice" placeholder="Harga" class="w-full p-3 bg-slate-900 rounded-xl outline-none">
-                    <input type="text" id="pImage" placeholder="Link Gambar" class="w-full p-3 bg-slate-900 rounded-xl outline-none">
-                    <input type="text" id="pLink" placeholder="Link File Download" class="w-full p-3 bg-slate-900 rounded-xl outline-none">
-                    <button onclick="addProduct()" class="w-full bg-blue-600 py-3 rounded-xl font-black text-xs uppercase">Posting</button>
+                <div class="space-y-2 text-xs text-black">
+                    <input type="text" id="pName" placeholder="Nama Barang" class="w-full p-3 bg-slate-900 text-white rounded-xl outline-none">
+                    <input type="number" id="pPrice" placeholder="Harga" class="w-full p-3 bg-slate-900 text-white rounded-xl outline-none">
+                    <input type="text" id="pImage" placeholder="Link Gambar" class="w-full p-3 bg-slate-900 text-white rounded-xl outline-none">
+                    <input type="text" id="pLink" placeholder="Link Download" class="w-full p-3 bg-slate-900 text-white rounded-xl outline-none">
+                    <button onclick="addProduct()" class="w-full bg-blue-600 py-3 rounded-xl font-black text-xs text-white uppercase tracking-widest">Posting</button>
                 </div>
             </div>
             <div class="glass p-5 rounded-[2rem] border-l-4 border-red-500">
@@ -121,8 +145,8 @@
                 <div id="topupList" class="space-y-3"></div>
             </div>
             <div class="glass p-5 rounded-[2rem] border-l-4 border-blue-500">
-                <h3 class="font-bold text-[10px] mb-4 text-blue-500 uppercase">Chat Masuk</h3>
-                <div id="adminChatList" class="space-y-2 text-xs font-bold italic"></div>
+                <h3 class="font-bold text-[10px] mb-4 text-blue-500 uppercase">Daftar Chat</h3>
+                <div id="adminChatList" class="space-y-2"></div>
             </div>
         </div>
     </div>
@@ -132,7 +156,7 @@
             <span id="chatTitle">Customer Service</span>
             <button onclick="toggleChat()"><i class="fa-solid fa-xmark text-lg"></i></button>
         </div>
-        <div id="chatMessages" class="flex-1 p-5 overflow-y-auto space-y-4 text-[11px]"></div>
+        <div id="chatMessages" class="flex-1 p-5 overflow-y-auto space-y-4 text-[11px] scroll-smooth"></div>
         <div class="p-3 bg-slate-900 flex gap-2 border-t border-slate-800">
             <input type="text" id="chatInput" class="flex-1 bg-slate-800 p-3 rounded-xl outline-none text-xs border border-slate-700" placeholder="Ketik pesan...">
             <button onclick="sendChat()" class="bg-blue-600 w-10 h-10 rounded-xl flex items-center justify-center text-white"><i class="fa-solid fa-paper-plane text-xs"></i></button>
@@ -184,7 +208,6 @@
             }).catch(err => alert("Gagal Daftar!"));
         }
 
-        // --- SISTEM PINDAH HALAMAN (SWITCHER) ---
         function switchPage(page) {
             const pages = ['store', 'history', 'profile'];
             pages.forEach(p => {
@@ -201,24 +224,19 @@
                 document.getElementById('nav').classList.remove('hidden');
                 document.getElementById('login-section').classList.add('hidden');
                 document.getElementById('register-section').classList.add('hidden');
-                
                 if(user.email === ownerEmail) {
                     document.getElementById('admin-section').classList.remove('hidden');
                     document.getElementById('user-section').classList.add('hidden');
                     document.getElementById('bottom-nav').classList.add('hidden');
-                    loadTopupRequests();
-                    loadAdminChatList();
-                    loadAdminProductList();
+                    loadTopupRequests(); loadAdminChatList(); loadAdminProductList();
                 } else {
                     document.getElementById('user-section').classList.remove('hidden');
                     document.getElementById('bottom-nav').classList.remove('hidden');
                     document.getElementById('admin-section').classList.add('hidden');
-                    switchPage('store'); // Default buka toko
+                    switchPage('store');
                     loadUserPurchases(user.uid);
                 }
-                loadProducts();
-                loadBalance(user.uid);
-                loadChats(user.uid);
+                loadProducts(); loadBalance(user.uid); loadChats(user.uid);
             } else {
                 document.getElementById('nav').classList.add('hidden');
                 document.getElementById('bottom-nav').classList.add('hidden');
@@ -239,29 +257,24 @@
         function toggleChat() { document.getElementById('chatBox').classList.toggle('hidden'); }
 
         function sendTopup() {
-            const u = auth.currentUser;
-            const amt = parseInt(document.getElementById('topupAmount').value);
-            const nm = document.getElementById('senderName').value;
-            if(!amt || !nm) return alert("Lengkapi data!");
+            const u = auth.currentUser, amt = parseInt(document.getElementById('topupAmount').value), nm = document.getElementById('senderName').value;
+            if(!amt || !nm) return alert("Isi nominal & nama!");
             db.ref('topup_requests').push({ uid: u.uid, email: u.email, amount: amt, name: nm, status: 'pending' });
             alert("Terkirim! Tunggu Maman cek mutasi.");
             switchPage('store');
         }
 
-        // --- PRODUK DUA KOLOM (GRID) ---
         function loadProducts() {
             db.ref('products').on('value', s => {
                 let h = '';
                 s.forEach(c => {
                     const p = c.val();
                     h += `<div class="glass overflow-hidden rounded-[1.5rem] flex flex-col border border-white/5 shadow-xl">
-                        <div class="p-2 pb-0">
-                            <img src="${p.image}" class="card-img shadow-sm">
-                        </div>
+                        <div class="p-2 pb-0"><img src="${p.image}" class="card-img shadow-sm"></div>
                         <div class="p-3 text-center">
-                            <p class="font-black text-[10px] uppercase truncate italic">${p.name}</p>
-                            <p class="text-green-400 text-[10px] font-black mt-1 mb-3 leading-none">Rp ${p.price.toLocaleString()}</p>
-                            <button onclick="buy('${p.price}', '${p.name}', '${p.link}', '${p.image}')" class="w-full bg-blue-600 py-2 rounded-xl font-black text-[9px] uppercase tracking-tighter">Beli</button>
+                            <p class="font-black text-[9px] uppercase truncate italic">${p.name}</p>
+                            <p class="text-green-400 text-[9px] font-black mt-1 mb-3 leading-none tracking-tighter">Rp ${p.price.toLocaleString()}</p>
+                            <button onclick="buy('${p.price}', '${p.name}', '${p.link}', '${p.image}')" class="w-full bg-blue-600 py-2 rounded-xl font-black text-[8px] uppercase tracking-tighter">Beli</button>
                         </div>
                     </div>`;
                 });
@@ -294,30 +307,25 @@
                             <div class="flex-1 text-[9px] font-black uppercase italic tracking-tighter">
                                 <p class="text-white mb-0.5 leading-none">${p.name}</p>
                                 <p class="text-slate-500 text-[7px] mb-2 font-normal">${p.date || 'Lama'}</p>
-                                <div class="flex gap-2">
-                                    <a href="${p.link}" target="_blank" class="text-blue-400 underline uppercase">Download</a>
-                                    <button onclick="toggleChat()" class="text-green-500 underline uppercase ml-1">Chat CS</button>
-                                </div>
+                                <div class="flex gap-2"><a href="${p.link}" target="_blank" class="text-blue-400 underline uppercase">Download</a>
+                                <button onclick="toggleChat()" class="text-green-500 underline uppercase ml-1">Chat CS</button></div>
                             </div>
                         </div>`;
                     });
                 }
-                document.getElementById('myPurchaseList').innerHTML = h || '<p class="text-center text-slate-600 text-[10px] py-10">Belum ada pembelian.</p>';
+                document.getElementById('myPurchaseList').innerHTML = h || '<p class="text-center text-slate-700 py-20 text-[10px] uppercase font-black tracking-widest">Kosong.</p>';
             });
         }
 
-        // --- ADMIN HELPERS ---
         function loadAdminProductList() {
             db.ref('products').on('value', s => {
                 let h = '';
                 s.forEach(c => {
                     const p = c.val();
                     h += `<div class="bg-slate-900/60 p-2 rounded-xl flex justify-between items-center border border-slate-800">
-                        <div class="text-[9px] flex items-center gap-2">
-                            <img src="${p.image}" class="w-7 h-7 rounded-lg object-cover">
-                            <span class="font-black uppercase truncate w-24">${p.name}</span>
-                        </div>
-                        <button onclick="deleteProduct('${c.key}')" class="w-7 h-7 bg-red-600/20 text-red-500 rounded-lg"><i class="fa-solid fa-trash-can text-[10px]"></i></button>
+                        <div class="text-[9px] flex items-center gap-2"><img src="${p.image}" class="w-7 h-7 rounded-lg object-cover">
+                        <span class="font-black uppercase truncate w-24">${p.name}</span></div>
+                        <button onclick="deleteProduct('${c.key}')" class="text-red-500"><i class="fa-solid fa-trash-can"></i></button>
                     </div>`;
                 });
                 document.getElementById('adminProductList').innerHTML = h;
@@ -327,8 +335,7 @@
         function deleteProduct(key) { if(confirm("Hapus?")) db.ref('products/' + key).remove(); }
         function addProduct() {
             const n = document.getElementById('pName').value, p = parseInt(document.getElementById('pPrice').value), i = document.getElementById('pImage').value, l = document.getElementById('pLink').value;
-            db.ref('products').push({ name: n, price: p, image: i, link: l });
-            alert("Ok!");
+            db.ref('products').push({ name: n, price: p, image: i, link: l }); alert("Ok!");
         }
         function accTopup(k, uid, a) { db.ref('users/' + uid + '/balance').transaction(c => (c || 0) + a); db.ref('topup_requests/' + k).remove(); }
         function rejectTopup(k) { db.ref('topup_requests/' + k).remove(); }
@@ -337,7 +344,7 @@
                 let h = '';
                 s.forEach(c => {
                     const r = c.val();
-                    h += `<div class="bg-slate-900 p-3 rounded-xl border border-slate-800 space-y-2"><div class="text-[9px] font-black uppercase"><p>${r.name}</p><p class="text-blue-400">Rp ${r.amount.toLocaleString()}</p></div><div class="flex gap-2"><button onclick="accTopup('${c.key}', '${r.uid}', ${r.amount})" class="flex-1 bg-green-600 py-1.5 rounded-lg text-[10px] text-black">ACC</button><button onclick="rejectTopup('${c.key}')" class="flex-1 bg-red-600 py-1.5 rounded-lg text-[10px]">Tolak</button></div></div>`;
+                    h += `<div class="bg-slate-900 p-3 rounded-xl border border-slate-800 space-y-2"><div class="text-[9px] font-black uppercase"><p>${r.name}</p><p class="text-blue-400">Rp ${r.amount.toLocaleString()}</p></div><div class="flex gap-2"><button onclick="accTopup('${c.key}', '${r.uid}', ${r.amount})" class="flex-1 bg-green-600 py-1.5 rounded-lg text-black font-bold">ACC</button><button onclick="rejectTopup('${c.key}')" class="flex-1 bg-red-600 py-1.5 rounded-lg text-white font-bold">TOLAK</button></div></div>`;
                 });
                 document.getElementById('topupList').innerHTML = h || 'Kosong.';
             });
@@ -346,9 +353,9 @@
             db.ref('chats').on('value', s => {
                 let h = '';
                 s.forEach(c => {
-                    h += `<button onclick="openAdminChat('${c.key}')" class="w-full bg-slate-900 p-3 rounded-xl border border-slate-800 text-left mb-2 flex justify-between items-center italic uppercase"><span>User: ${c.key.substring(0,8)}</span><i class="fa-solid fa-chevron-right"></i></button>`;
+                    h += `<button onclick="openAdminChat('${c.key}')" class="w-full bg-slate-900 p-3 rounded-xl border border-slate-800 text-left mb-2 flex justify-between items-center italic uppercase text-[10px] font-bold"><span>User: ${c.key.substring(0,8)}</span><i class="fa-solid fa-chevron-right text-blue-500"></i></button>`;
                 });
-                document.getElementById('adminChatList').innerHTML = h || 'Belum ada chat.';
+                document.getElementById('adminChatList').innerHTML = h || 'Kosong.';
             });
         }
         function openAdminChat(uid) { selectedUserChat = uid; document.getElementById('chatBox').classList.remove('hidden'); loadChats(uid); }
